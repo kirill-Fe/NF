@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Улучшенный форум</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка -->
+        <header class="forum-header">
+            <div class="logo">Forum<span>Pro</span></div>
+            <nav class="main-nav">
+                <a href="#" class="active"><i class="fas fa-home"></i> Главная</a>
+                <a href="#"><i class="fas fa-list"></i> Категории</a>
+                <a href="#"><i class="fas fa-users"></i> Пользователи</a>
+            </nav>
+            <div class="user-actions" id="userActions">
+                <button class="btn-login" id="btnLogin">Войти</button>
+                <button class="btn-register" id="btnRegister">Регистрация</button>
+            </div>
+        </header>
+
+        <!-- Модальные окна -->
+        <div class="modal" id="authModal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="auth-tabs">
+                    <button class="tab-btn active" data-tab="login">Вход</button>
+                    <button class="tab-btn" data-tab="register">Регистрация</button>
+                </div>
+                
+                <div class="tab-content active" id="login">
+                    <h3>Вход в аккаунт</h3>
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Пароль</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn-submit">Войти</button>
+                    </form>
+                </div>
+                
+                <div class="tab-content" id="register">
+                    <h3>Создать аккаунт</h3>
+                    <form id="registerForm">
+                        <div class="form-group">
+                            <label for="regUsername">Имя пользователя</label>
+                            <input type="text" id="regUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regPassword">Пароль</label>
+                            <input type="password" id="regPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regConfirmPassword">Подтвердите пароль</label>
+                            <input type="password" id="regConfirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn-submit">Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основное содержимое -->
+        <main class="forum-main">
+            <aside class="sidebar">
+                <div class="categories">
+                    <h3>Категории</h3>
+                    <ul id="categoryList">
+                        <li class="active">Все темы</li>
+                        <li>Программирование</li>
+                        <li>Дизайн</li>
+                        <li>Маркетинг</li>
+                        <li>Обсуждения</li>
+                    </ul>
+                </div>
+                <div class="online-users">
+                    <h3>Сейчас онлайн <span id="onlineCount">0</span></h3>
+                    <ul id="onlineUsersList"></ul>
+                </div>
+            </aside>
+
+            <section class="content">
+                <div class="content-header">
+                    <h2>Последние темы</h2>
+                    <button class="btn-new-topic" id="btnNewTopic">Новая тема</button>
+                </div>
+
+                <div class="topics-container" id="topicsContainer">
+                    <!-- Темы будут загружаться здесь -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Модальное окно новой темы -->
+        <div class="modal" id="newTopicModal">
+            <div class="modal-content">
+                <span class="close-modal">&times;</span>
+                <h3>Создать новую тему</h3>
+                <form id="newTopicForm">
+                    <div class="form-group">
+                        <label for="topicCategory">Категория</label>
+                        <select id="topicCategory" required>
+                            <option value="">Выберите категорию</option>
+                            <option value="Программирование">Программирование</option>
+                            <option value="Дизайн">Дизайн</option>
+                            <option value="Маркетинг">Маркетинг</option>
+                            <option value="Обсуждения">Обсуждения</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="topicTitle">Заголовок</label>
+                        <input type="text" id="topicTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="topicContent">Содержание</label>
+                        <textarea id="topicContent" rows="6" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="topicTags">Теги (через запятую)</label>
+                        <input type="text" id="topicTags" placeholder="например, javascript, html, css">
+                    </div>
+                    <button type="submit" class="btn-submit">Опубликовать</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Модальное окно темы -->
+        <div class="modal" id="topicModal">
+            <div class="modal-content topic-modal-content">
+                <span class="close-modal">&times;</span>
+                <div class="topic-header">
+                    <h3 id="modalTopicTitle"></h3>
+                    <div class="topic-meta">
+                        <span class="author" id="modalTopicAuthor"></span>
+                        <span class="date" id="modalTopicDate"></span>
+                        <span class="category" id="modalTopicCategory"></span>
+                    </div>
+                    <div class="topic-tags" id="modalTopicTags"></div>
+                </div>
+                <div class="topic-content" id="modalTopicContent"></div>
+                <div class="topic-actions">
+                    <button class="btn-like" id="btnLike">
+                        <i class="far fa-thumbs-up"></i> <span id="likeCount">0</span>
+                    </button>
+                    <button class="btn-bookmark" id="btnBookmark">
+                        <i class="far fa-bookmark"></i> В закладки
+                    </button>
+                </div>
+                
+                <div class="comments-section">
+                    <h4>Комментарии (<span id="commentsCount">0</span>)</h4>
+                    <div class="comments-list" id="commentsList"></div>
+                    <form id="newCommentForm">
+                        <textarea id="commentContent" placeholder="Напишите ваш комментарий..." required></textarea>
+                        <button type="submit" class="btn-submit">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
